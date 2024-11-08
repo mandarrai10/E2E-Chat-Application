@@ -15,7 +15,6 @@ var switchLoginForm = function(e) {
     exInactive.classList.add("login-active");
     exInactive.removeEventListener("click", switchLoginForm, true);
 
-    // Enlever le required des formulaires
     let usernameLogin = document.getElementById("usernameLogin");
     if (usernameLogin.required) {
         // Disable Login
@@ -35,7 +34,6 @@ var switchLoginForm = function(e) {
         // Disable password checker
     }
 
-    // Remplaçage du formulaire
     let hiddenForm = document.querySelector(".log-form-container.hidden");
     let activeForm = document.querySelector(".log-form-container.visible");
     activeForm.classList.remove("visible");
@@ -45,12 +43,8 @@ var switchLoginForm = function(e) {
 
 };
 
-// ToDo: passer en JQueries
 var printErrorLoginForm = function(res) {
-    // ToDo: ne pas filtrer par status code et garder qu'une seule ligne de message d'erreur en printant dedans res.message
-    // get("ErrorField")
-    // ErrorField.innerHTML = res.message
-    // rendre visible
+    
     console.log(res);
     if (res.status === 409) {
         $("#errorRegister").removeClass("hidden");
@@ -166,7 +160,6 @@ window.addEventListener('DOMContentLoaded', async event => {
         }
     }
 
-    // Ajoute un événement sur l'input pour vérifier la rigidité du mot de passe après que l'utilisateur l'ait tapé
     password_input.addEventListener("input", () => {
         StrengthChecker(password_input.value);
     });

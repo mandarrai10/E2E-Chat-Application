@@ -19,8 +19,6 @@ exports.getConversations = async (req, res, next) => {
 			.populate("userId1", "username")
 			.populate("userId2", "username")
 
-		// Tri des conversations par timestamp du dernier message
-		// ToDo: classer en premier une conversation qui n'a pas de dernier message
 		conversations.sort(function (a, b) {
 			if (a.lastMessageId && b.lastMessageId)
 				return b.lastMessageId.time - a.lastMessageId.time
@@ -47,7 +45,6 @@ exports.newConversation = async (req, res, next) => {
 		if (user.username == user2.username)
 			return res.status(411).json({ error: "You cannot create a conversation with yourself." });
 
-		// Vérifier que la conversation n'existe pas déjà 
 		const already = await Conversation.findOne(
 			{
 				$or: [
@@ -56,7 +53,7 @@ exports.newConversation = async (req, res, next) => {
 				]
 			}
 		)
-		if (already) // ToDo: renvoyer l'ID de la conversation pour l'ouvrir (agira comme recherche)
+		if (already)
 			return res.status(411).json({ error: "This conversation already exists", convId: already._id });
 
 		await Conversation.create({
@@ -87,7 +84,6 @@ exports.isDiffieHellmanable = async (req, res, next) => {
 		if (user.username == user2.username)
 			return res.status(411).json({ error: "You cannot create a conversation with yourself." });
 
-		// Vérifier que la conversation n'existe pas déjà 
 		const already = await Conversation.findOne(
 			{
 				$or: [

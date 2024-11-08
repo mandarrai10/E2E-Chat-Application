@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 
-// Crible d'Eratosthène
 function getPrime(min, max) {
     let liste = Array(max + 1).fill(0).map((_, i) => i);
 
@@ -16,7 +15,7 @@ function getPrime(min, max) {
 }
 
 
-let DH = crypto.createDiffieHellman(1000); // bit length // todo : pourquoi ça marche pas avec + de bits ?
+let DH = crypto.createDiffieHellman(1000); 
 const p = parseInt(DH.getPrime('hex'), 16);
 const g = parseInt(DH.getGenerator('hex'), 16);
 console.log("p:", p);

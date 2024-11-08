@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="https://cdn.glitch.global/42e33cd0-7279-4ff4-bbdf-b2e87b5fb08b/logo2.jpeg?v=1647381921310" />
 
-    <title>CiText</title>
+    <title>Chat Application</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -52,7 +52,6 @@
         </div>
     </div>
 
-    <!-- Ajouter un contact -->
     <div class="modal fade" id="addContactPopup" data-keyboard="true" role="dialog">
         <div class="modal-dialog ">
             <div class="modal-content">
@@ -67,7 +66,7 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">@</div>
-                                <input type="text" class="form-control" id="addContactInput" placeholder="Pseudo">
+                                <input type="text" class="form-control" id="addContactInput" placeholder="Username">
                             </div>
                         </div>
 
@@ -83,7 +82,6 @@
                         placeholder</small>
 
                 </div>
-                <!-- Fin modal body -->
             </div>
         </div>
     </div>
@@ -100,7 +98,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <h5 id="otherUserDFProgress" class="form-text text-primary fw-bold">En attente de ...</h5>
+                    <h5 id="otherUserDFProgress" class="form-text text-primary fw-bold">Waiting for ...</h5>
                     <form>
                         <div class="form-group">
                             <!-- ToDo : passer en DH authentifié -->
@@ -117,10 +115,9 @@
                             <!-- <div class="input-group"> -->
                             <!-- <div class="input-group-addon">AES</div> -->
                             <input type="text" class="form-control" id="generatedSymKey"
-                                placeholder="En attente du protocole..." disabled>
+                                placeholder="Waiting for the protocol..." disabled>
                             <!-- </div> -->
                         </div>
-                        <!-- ToDo: ajouter les champs nécessaires au Diffie-Hellman -->
                         <button id="cancelDiffieHellman" type="submit" class="btn btn-default">Cancel protocol</button>
                         <button id="readyDiffieHellman" type="submit" class="btn btn-primary">I'm ready</button>
                         <button id="terminateDiffieHellman" class="btn btn-danger" data-dismiss="modal"
@@ -134,7 +131,6 @@
         </div>
     </div>
 
-    <!-- Notif Diffie-Hellman -->
     <div class="modal fade" id="notifDHPopup" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -142,14 +138,13 @@
                     <p id="notifDHText">So-and-so wants to start a private conversation with you.</p>
                 </div>
                 <div class="modal-footer">
-                    <button id="rejectDiffieHellman" type="button" class="btn btn-default">Refuser</button>
-                    <button id="acceptDiffieHellman" type="button" class="btn btn-primary">Accepter</button>
+                    <button id="rejectDiffieHellman" type="button" class="btn btn-default">Refuse</button>
+                    <button id="acceptDiffieHellman" type="button" class="btn btn-primary">Accept</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Clés AES -->
     <div class="modal fade" id="AESKeysPopup" data-keyboard="true" role="dialog">
         <div class="modal-dialog ">
             <div class="modal-content">
@@ -178,20 +173,16 @@
                     <small id="AESKeysError" class="form-text text-danger fw-bold invisible">Error placeholder</small>
 
                 </div>
-                <!-- Fin modal body -->
             </div>
         </div>
     </div>
 
-    <!-- Fin pop-ups -->
 
     <div class="container app">
         <div class="row app-one">
 
             <div id="partie-gauche" class="col-sm-4 side">
-                <!-- Partie gauche -->
                 <div class="side-one">
-                    <!-- Side One  -->
 
                     <div class="row heading-left">
                         <div class="col-sm-6 col-xs-6 heading-left-name">
@@ -243,7 +234,6 @@
                         </div>
 
                     </div>
-                    <!-- Fin liste de contacts -->
 
                     <div class="row footer-gauche">
 
@@ -262,19 +252,15 @@
                     </div>
 
                 </div>
-                <!-- Fin Side One  -->
 
             </div>
-            <!-- Fin partie gauche -->
 
 
 
             <div id="partie-droite" class="col-sm-8 conversation">
-                <!-- Début partie droite -->
 
 
 
-                <!-- Accueil -->
                 <div id="accueil" class="row accueil-body">
                     <div class="accueil-main">
                         <p class="text-menu">Click on a conversation to start.</p>
@@ -295,8 +281,6 @@
 
 
                 <div id="header-chat" class="row heading hidden">
-                    <!-- header de conversation -->
-                    <!-- Bouton retour qui s'affiche uniquement en dessous de sm -->
                     <div id="back-button" class="hidden-sm hidden-md hidden-lg col-sm-2 col-xs-1 heading-dot">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
                     </div>
@@ -313,11 +297,9 @@
                         <i class="fa fa-ellipsis-h right" aria-hidden="true"></i>
                     </div>
                 </div>
-                <!-- fin header de conversation -->
 
 
                 <div id="messages-chat" class="row message hidden">
-                    <!-- Conteneur des messages -->
 
                     <div class="row message-body">
                         <div class="message-main">
@@ -354,14 +336,12 @@
 
 
                 </div>
-                <!-- Fin messages -->
 
 
                 <div id="reply-chat" class="row reply hidden">
-                    <!-- Barre d'envoi de message -->
                     <div class="col-sm-9 col-xs-9 reply-main">
                         <input id="chat-box" type="text" class="write-message"
-                            placeholder="Écris ici ton message" /></input>
+                            placeholder="Write your message here" /></input>
                     </div>
                     <!-- <div class="col-sm-1 col-xs-1 reply-send">
                     </div> -->

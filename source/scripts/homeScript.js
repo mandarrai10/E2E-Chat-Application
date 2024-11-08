@@ -91,31 +91,25 @@ http = http == "http" ? "ws" : "wss"; // ws:// si serveur HTTP, sinon wss://
 const ws = new WebSocket(http + "://" + location.host.split(':')[0] + ":8080");
 */
 
-// Que faire lorsque la connexion est établie
 socket.on("connected", (metadata) => {
     console.log("We are connected,", metadata.username);
 });
 
-// Que faire quand le client reçoit un message du serveur
 socket.on("newMessage", (message) => {
-    // Si le message est dans un chat chiffré déverrouillé : le déchiffrer
     if (AESKeys.has(message.idchat)) {
         message.content = CryptoJS.AES.decrypt(message.content, AESKeys.get(message.idchat));
         message.content = message.content.toString(CryptoJS.enc.Utf8);
     }
 
-    // Stockage des messages dans le dictionnaire messagesDict selon les chats :
     //      "chatid": [message, message, message]
     //      "chatid": [message, message, message]
     if (!(message.idchat in messagesDict))
         messagesDict[message.idchat] = Array()
     messagesDict[message.idchat].push(message);
 
-    // Afficher les messages si le nouveau message est sur la conversation active
     if (message.idchat == activeConversationId)
         renderMessages();
 
-    // Actualiser lastMessage et messageHour et faire remonter la conversation
     renderConversations();
 });
 
@@ -127,7 +121,6 @@ socket.on("allMessages", (msgs) => {
         messagesDict[message.idchat].push(message);
     });
 
-    // Afficher les messages et actualiser les conversations
     renderMessages();
     renderConversations();
 });
@@ -151,8 +144,7 @@ async function renderConversations() {
         if (!conversations)
             return;
 
-        // Filtrage des conversations chiffrées dont la clé a été saisie         
-        let stillEncrypted = 0; // Nombre de conversations non déchiffrées
+        let stillEncrypted = 0; 
         for (let i = conversations.length - 1; i >= 0; --i) {
             if (conversations[i].encrypted) {
                 if (AESKeys.has(conversations[i]._id)) {
@@ -165,11 +157,9 @@ async function renderConversations() {
             }
         }
 
-        // Récupération des utilisateurs en ligne
         await getOnlineUsers().then(function(onlineUsers) {
             $("#contact-list").empty();
             for (let i = 0; i < conversations.length; i++) {
-                // Pas d'affichage des conversations chiffrées non déverrouillées
                 if (conversations[i].encrypted && !conversations[i].unlocked)
                     continue;
 
@@ -200,7 +190,6 @@ async function renderConversations() {
 
                 conversations[i].idcontact = i;
 
-                // Titre de la conversation
                 let contactTitle = "";
                 if (conversations[i].userId1 == null)
                     contactTitle = "[Discussions]";
@@ -208,7 +197,6 @@ async function renderConversations() {
                     if (conversations[i].encrypted)
                         contactTitle += "🔒 ";
                     if (conversations[i].userId1.username == myPseudo) {
-                        // ToDo: ajouter un vrai truc CSS pour distinguer les personnes en ligne et les chats chiffrés
                         if (onlineUsers.includes(conversations[i].userId2.username))
                             contactTitle += "🟢 "
                         contactTitle += conversations[i].userId2.username;
@@ -220,7 +208,6 @@ async function renderConversations() {
                 }
                 $(`#contact-title-${i}`).text(contactTitle);
 
-                // Contenu du dernier message
                 if (conversations[i].lastMessageId) {
 
                     if (conversations[i].lastMessageId.author == myPseudo)
@@ -228,7 +215,6 @@ async function renderConversations() {
                     else
                         $(`#contact-message-${i}`).text(conversations[i].lastMessageId.author + ": " + conversations[i].lastMessageId.content);
 
-                    // Timestamp du dernier message (affichée en date si message ancien)
                     let messageDate = new Date(parseInt(conversations[i].lastMessageId.time)).getDate();
                     if (messageDate == new Date().getDate())
                         $(`#contact-hour-${i}`).text(convertTimestampToTime(conversations[i].lastMessageId.time));
@@ -236,18 +222,15 @@ async function renderConversations() {
                         $(`#contact-hour-${i}`).text(convertTimestampToDate(conversations[i].lastMessageId.time));
 
                 } else {
-                    // Nouvelle conversation
                     $(`#contact-message-${i}`).text("New conversation");
                     $(`#contact-hour-${i}`).text("-")
                 }
             }
 
-            // Ajout des évènements au clic sur contact
             for (let i = 0; i < conversations.length; i++) {
                 $(`#contact-${i}`).on("click", selectContact);
             }
 
-            // ToDo: réactiver le if quand tout est ok
             // if (stillEncrypted) {
                 $("#contact-list").append(`
                 <div class="row sideBar-alert-body">
@@ -284,12 +267,10 @@ async function sendMessage() {
     }
     
     let message = null;
-    // Si on est dans une conversation chiffrée : chiffrer le message
     if (AESKeys.has(activeConversationId)) {
         let encrypted = CryptoJS.AES.encrypt($("#chat-box").val(), AESKeys.get(activeConversationId));
         message = new Message(activeConversationId, myPseudo, encrypted.toString(), new Date().getTime());
     } else {
-        // Sinon : envoyer directement
         message = new Message(activeConversationId, myPseudo, $("#chat-box").val(), new Date().getTime())
     }
     
@@ -298,13 +279,11 @@ async function sendMessage() {
 }
 
 
-// Maintient la scroll bar au bas à chaque message ajouté
 function updateScroll() {
     var messagesChat = document.querySelector("#messages-chat");
     messagesChat.scrollTop = messagesChat.scrollHeight;
 }
 
-// ToDo: faire un updateScroll après renderConversation
 
 
 function renderMessages() {
@@ -312,14 +291,12 @@ function renderMessages() {
     if (!(activeConversationId in messagesDict))
         return;
 
-    // Récupérer les messages de la conversation courante
     let messagesArray = messagesDict[activeConversationId]
     for (let i = 0; i < messagesArray.length; i++) {
 
         var author = messagesArray[i].author;
         var messageDate = new Date(parseInt(messagesArray[i].time)).getDate();
 
-        // Affichage de la date au premier message ou entre 2 messages de dates différentes 
         if ((i == 0) ||
             (i > 0 && messageDate != new Date(parseInt(messagesArray[i - 1].time)).getDate())) {
 
@@ -334,7 +311,6 @@ function renderMessages() {
         }
 
 
-        // Message envoyé 
         if (myPseudo == author) {
             $("#messages-chat").append(`
               <div class="row message-body">
@@ -354,7 +330,6 @@ function renderMessages() {
               </div>
           `);
         }
-        // Message reçu
         else {
             $("#messages-chat").append(`
               <div class="row message-body">
@@ -378,7 +353,6 @@ function renderMessages() {
         $(`#chat-content-${i}`).text(messagesArray[i].content);
         $(`#chat-time-${i}`).text(convertTimestampToTime(messagesArray[i].time));
 
-        // Check si premier message pour ajouter le nom
         if (i == 0 ||
             (i > 0 && messagesArray[i - 1].author != author) ||
             (i > 0 && messagesArray[i - 1].author == author && messageDate != new Date(parseInt(messagesArray[i - 1].time)).getDate())) {
@@ -395,20 +369,17 @@ window.addEventListener('DOMContentLoaded', async event => {
     getUsername().then(function(data) {
         myPseudo = data.username;
         myId = data.id;
-        // Affichage du pseudo de l'utilisateur connecté
         $("#username").text(myPseudo);
     });
 
     await renderConversations();
 
-    // Touche entrée liée au bouton d'envoi de message
     window.addEventListener('keyup', function(event) {
         if (event.keyCode === 13) {
             $("#send").click();
         }
     });
 
-    // Link des boutons à leurs fonctions
     $("#back-button").click(function() {
         $("#partie-gauche").slideToggle("fast");
     });
@@ -422,17 +393,15 @@ window.addEventListener('DOMContentLoaded', async event => {
 });
 
 
-/* -------------------- Menu d'ajout de conversation -------------------- */
+/* -------------------- Conversation Add Menu -------------------- */
 
 function openAddContactPopup(event) {
     $("#addContactError").addClass("invisible");
     $('#addContactPopup').modal('show');
 
-    // Bouton confirmer la conversation non chiffrée
     $("#addContactConfirm").on("click", async function(e) {
         e.preventDefault();
 
-        // Check si l'utilisateur a entré un pseudo
         if ($("#addContactInput").val().length == 0) {
             $("#addContactError").text("Veuillez entrer l'identifiant de l'utilisateur à qui vous souhaitez écrire.");
             $("#addContactError").removeClass("invisible");
@@ -460,11 +429,9 @@ function openAddContactPopup(event) {
         }).catch(error => console.error('Error:', error))
     });
 
-    // Bouton Conversation chiffrée
     $('#openEndToEndPopup').on('click', async function(e) {
         e.preventDefault();
 
-        // Check si l'utilisateur a entré un pseudo
         if ($("#addContactInput").val().length == 0) {
             $("#addContactError").text("Please enter the username of the user you want to write to.");
             $("#addContactError").removeClass("invisible");
@@ -473,7 +440,6 @@ function openAddContactPopup(event) {
 
         // POST Request 
         const body = { username2: $("#addContactInput").val() };
-        // $("#addContactInput").val("");
         const res = await fetch('/api/chats/isDiffieHellmanable', {
             method: 'POST',
             body: JSON.stringify(body),
@@ -508,9 +474,7 @@ function processDiffieHellman(data) {
             backdrop: 'static',
             keyboard: false
         })
-        // ToDo: trouver un moyen de prévenir l'utilisateur que si il quitte, le protocole s'annule (et emit un cancelDiffieHellman)
 
-    // Boutons de pop-up et placeholder de clé résultat
     $('#diffieHellmanError').addClass("invisible");
     $('#readyDiffieHellman').show();
     $('#cancelDiffieHellman').show();
@@ -520,7 +484,6 @@ function processDiffieHellman(data) {
     $('#diffieHellmanPopup').modal('show');
     $('#otherUserDFProgress').text(`Click on “Im ready” to notify"${data.user2}`);
 
-    // ToDo après DH authentifié: si les clés sont déjà renseignées: les écrire dans publicKeyInput et privateKeyInput 
 
     $('#cancelDiffieHellman').on('click', function(e) {
         e.preventDefault();
@@ -533,18 +496,15 @@ function processDiffieHellman(data) {
         e.preventDefault();
         $('#readyDiffieHellman').off('click');
         $('#otherUserDFProgress').text(`Waiting for ${data.user2}...`);
-        // Calcul de la valeur publique A du DH
         let array = new Uint32Array(10);
         window.crypto.getRandomValues(array);
         senderSecret = array[0] % data.p;
         data.publicA = expmod(data.g, senderSecret, data.p);
-        // Envoi des données au serveur pour transfert à user2
         socket.emit("engageDiffieHellman", data);
     });
 }
 
 socket.on("acceptedDiffieHellman", async(data) => {
-    // Retrait des deux boutons
     $('#readyDiffieHellman').hide();
     $('#cancelDiffieHellman').hide();
     $('#terminateDiffieHellman').show();
@@ -554,7 +514,6 @@ socket.on("acceptedDiffieHellman", async(data) => {
     $('#diffieHellmanError').removeClass("invisible");
     let secretKey = expmod(data.publicB, senderSecret, data.p);
 
-    // POST Request pour la création de la conversation 
     const body = { username2: data.user2 };
     const res = await fetch('/api/chats/newEncryptedConversation', {
         method: 'POST',
@@ -563,11 +522,8 @@ socket.on("acceptedDiffieHellman", async(data) => {
     })
 
     res.json().then(response => {
-        // Affichage de l'ID de conversation et de la clé symétrique 
         $('#generatedSymKey').val(`"${response.idChat}":  "${secretKey.toString(16)}", `);
-        // Stockage de la paire en Map
         AESKeys.set(response.idChat, secretKey.toString(16));
-        // Envoi de la nouvelle conversation aux deux parties
         socket.emit("newConversation", { userId1: response.userId1, userId2: response.userId2 });
     }).catch(error => console.error('Error:', error))
 });
@@ -586,7 +542,6 @@ socket.on("notifDiffieHellman", (data) => {
 
     $('#acceptDiffieHellman').on('click', async function(e) {
         e.preventDefault();
-        // Calcul de la valeur publique B du DH
         let array = new Uint32Array(1);
         window.crypto.getRandomValues(array);
         let receiverSecret = array[0] % data.p;
@@ -621,17 +576,13 @@ function finishDiffieHellman(data, receiverSecret) {
             keyboard: false
         })
 
-    // Boutons de popup
     $('#readyDiffieHellman').hide();
     $('#cancelDiffieHellman').hide();
     $('#terminateDiffieHellman').show();
 
-    // ToDo: trouver un moyen de prévenir l'utilisateur que si il quitte, le protocole s'annule (et emit un cancelDiffieHellman)
     $('#diffieHellmanPopup').modal('show');
     $('#otherUserDFProgress').text(`The conversation encrypted with ${data.user1} has been created.`);
-    // Affichage de l'ID de conversation et de la clé symétrique 
     $('#generatedSymKey').val(`"${idChat}":  "${secretKey.toString(16)}", `);
-    // Stockage de la paire en Map
     AESKeys.set(idChat, secretKey.toString(16));
     $('#diffieHellmanError').text("Be sure to save the symmetric key to a local keystore before closing this window.");
     $('#diffieHellmanError').removeClass("invisible");
@@ -640,14 +591,13 @@ function finishDiffieHellman(data, receiverSecret) {
 
 socket.on("cancelDiffieHellman", () => {
     $('#otherUserDFProgress').text(`Protocole Diffie-Hellman annulé.`);
-    // ToDo: cancelDiffieHellman : dire qui a annulé et fermer la fenetre 
 });
 
 
 /* -------------------- AES -------------------- */
 
 function decryptAllMessages(idChat, key) {
-    if (!(idChat in messagesDict)) // Pas d'ancien messages dans cette conversation 
+    if (!(idChat in messagesDict)) 
         return;
     
     let messagesArray = messagesDict[idChat];
@@ -657,7 +607,6 @@ function decryptAllMessages(idChat, key) {
     }
 }
 
-// Pop-up pour la saisie des clés AES
 function AESKeysPopup() {
     $("#AESKeysError").addClass("invisible");
     $('#AESKeysPopup').modal('show');
@@ -671,19 +620,16 @@ function AESKeysPopup() {
             $("#AESKeysError").removeClass("invisible");
         }
 
-        // Parsing des IDs conv / clés AES
-        const jsonRegExp = new RegExp('\".+\"\ *\:\ *\".+\"'); // Regex "dfdf":"dsfsd"
-        const parsed = ($('#AESKeysInput').val().match(jsonRegExp))[0]; // ToDo : tester cette méthode
+        const jsonRegExp = new RegExp('\".+\"\ *\:\ *\".+\"'); 
+        const parsed = ($('#AESKeysInput').val().match(jsonRegExp))[0]; 
         console.log(parsed);
 
         if (parsed.length) {
-            // Retirer les espaces
             let string = parsed.replace(/ /g, "").replace(/"/g, "");
             const keys = string.split(",");
             console.log(keys);
             for (const key of keys) {
                 AESKeys.set(key.split(":")[0], key.split(":")[1]);
-                // Déchiffrer les messages du chat
                 decryptAllMessages(key.split(":")[0], key.split(":")[1]) 
             }
             renderConversations();
@@ -697,7 +643,7 @@ function AESKeysPopup() {
 }
 
 
-/* -------------------- Menu de déconnexion -------------------- */
+/* -------------------- Logout Menu -------------------- */
 
 async function deconnexion() {
     try {
@@ -735,7 +681,6 @@ function openChat(chat) {
     }
     $(`#contact-${chat.idcontact}`).addClass("selected");
 
-    // Affichage de la discussion sur la partie droite en cachant l'accueil
     $("#accueil").addClass("hidden");
     $("#footer").addClass("hidden");
 
@@ -743,14 +688,11 @@ function openChat(chat) {
     $("#messages-chat").removeClass("hidden");
     $("#reply-chat").removeClass("hidden");
 
-    // Si écran XS : retirer la partie gauche au clic sur un contact
     if ($(window).width() < 768) {
-        // $("#partie-gauche").addClass("hidden");
-        $("#partie-gauche").slideToggle("fast"); // ToDo: faire un slide left/right (cf. jquery-ui easing)
+        $("#partie-gauche").slideToggle("fast"); 
     };
 
-    // Afficher le nom du destinaire
-    activeConversationId = chat._id; // Set active conv ID
+    activeConversationId = chat._id; 
     if (chat.userId1 == null)
         $("#chat-name").text("[Discussions] – General Channel");
     else if (chat.userId1.username == myPseudo)
@@ -758,7 +700,6 @@ function openChat(chat) {
     else
         $("#chat-name").text(chat.userId1.username);
 
-    // Afficher les messages
     renderMessages();
 }
 
