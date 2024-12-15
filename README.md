@@ -4,27 +4,27 @@
 [![Javascript](https://img.shields.io/badge/Made%20with-Javascript-B22727?labelColor=EE5007&style=for-the-badge)]()
 [![Socket](https://img.shields.io/badge/Uses-Socket.io-E4AEC5?labelColor=FFC4DD&style=for-the-badge)]()
 
-Web app de **messagerie instantée chiffrée de bout en bout** disponible sur 🔗 [CiText.fr](https://CiText.fr).
+Instant messaging web app with end-to-end encryption available at 🔗 [CiText.fr](https://CiText.fr).
 
-Conversation de groupe, chiffrement end-to-end, messages privés et gestion du compte. 
+Group chat, end-to-end encryption, private messages, and account management.
 
-## Lancement du serveur
+## Server Launch
 
-- Installer Mongo (Linux Ubuntu) :
+- Install Mongo (Linux Ubuntu):
   
   ```shell
   sudo apt get install mongo
-  # Vérifier que tout fonctionne 
+  # check that everything is working
   mongo
   > show dbs
   ```
 
-- À la racine du projet :
+- At the root of the project:
   - `npm init -y`
   - `npm install cors mongoose express jsonwebtoken dotenv bcryptjs cookie-parser ws socket.io crypto-js`
   - `npm install nodemon -D`
-  - Modifier les scripts du fichier `package.json` comme suit :
-
+  - Modify the scripts in the package.json file as follows:
+    
     ```json
     "scripts": {
       "start": "node index.js",
@@ -33,7 +33,7 @@ Conversation de groupe, chiffrement end-to-end, messages privés et gestion du c
     }
     ```
 
-  - Créer un fichier `.env` avec les valeurs suivantes :
+  - Create a .env file with the following values:
 
     ```env
     API_PORT=8000
@@ -45,16 +45,13 @@ Conversation de groupe, chiffrement end-to-end, messages privés et gestion du c
     TOKEN_KEY=random_string
     ```
 
-- Taper `npm run dev` pour lancer le serveur (`index.js`)
-- Le script s'actualise automatiquement avec `nodemon` à chaque modification de fichier
-- Les messages "*Listening on `http://localhost:8000`*" et "*Successfully connected to database*" confirment le bon lancement du serveur
+- Type `npm run dev` to start the server (index.js).
+- The script will automatically refresh with `nodemon` on every file modification.
+- The messages "Listening on `http://localhost:8000`" and "Successfully connected to database" confirm that the server has started successfully.
 
 ## Auteurs
 
 * [@Elyn](https://github.com/vdElyn)
-* [@Vincent](https://github.com/uvsq21802951)
-* [@Elo](https://github.com/elo0501)
-* [@Dylan](https://github.com/deadcode-overflow)
 
 ## 🚧 Axes d'amélioration
 
