@@ -49,7 +49,7 @@ Group chat, end-to-end encryption, private messages, and account management.
 - The script will automatically refresh with `nodemon` on every file modification.
 - The messages "Listening on `http://localhost:8000`" and "Successfully connected to database" confirm that the server has started successfully.
 
-## Auteurs
+## Authors
 
 * [@mandarrai10](https://github.com/mandarrai10)
 
