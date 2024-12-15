@@ -51,11 +51,11 @@ Group chat, end-to-end encryption, private messages, and account management.
 
 ## Auteurs
 
-* [@Elyn](https://github.com/vdElyn)
+* [@mandarrai10](https://github.com/mandarrai10)
 
-## 🚧 Axes d'amélioration
+## 🚧 Areas for Improvement
 
-### Côté serveur
+### Server Side
 
 - [ ] Améliorer la gestion des statuts `En ligne` / `Hors ligne` des utilisateurs
 - [ ] Gérer le cas de la double connexion pour un même utilisateur 
