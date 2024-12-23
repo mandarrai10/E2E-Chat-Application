@@ -56,7 +56,7 @@ mongo
 - The script automatically restarts with `nodemon` whenever a file is modified.
 - Messages like `Listening on http://192.168.0.193:8000` and 'Successfully connected to database' confirm the server started successfully.
 
-## Auteurs
+## Authors
 
 - [@mandarrai10](https://github.com/mandarrai10n)
 
