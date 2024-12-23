@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cookieParser());
 app.use(express.json()); // to support JSON-encoded bodies
-app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
+app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodiesI
 
 const path = require("path");
 const htmlPath = path.join(__dirname, "/source");
@@ -83,7 +83,7 @@ const Conversation = require("./model/conversation");
 const CryptoJS = require("crypto-js");
 
 io.on("connection", async (socket) => {
-// Checks if the Discussions channel exists and creates it if it doesn't
+  // Checks if the Discussions channel exists and creates it if it doesn't
   const discussions = await Conversation.findOne({ userId1: null });
   if (!discussions) {
     console.log("Création du canal Discussions");
@@ -128,8 +128,7 @@ io.on("connection", async (socket) => {
         console.log("Sent to " + metadata.username);
         clientSocket.emit("newMessage", message);
       });
-    }
-    else {
+    } else {
       clientList.forEach(function (metadata, clientSocket) {
         if (
           metadata.id.equals(conv.userId1) ||
@@ -168,8 +167,7 @@ io.on("connection", async (socket) => {
     });
   });
 
-  socket.on("cancelDiffieHellman", async (userId1, userId2) => {
-  });
+  socket.on("cancelDiffieHellman", async (userId1, userId2) => {});
 
   socket.on("disconnect", async () => {
     console.log("%s has disconnected", clientList.get(socket).username);

@@ -1,29 +1,36 @@
+# Current Progress!
+
+**To start:** node index.js
+We can communicate with two users from different PC's or phone by giving the ip address in .env file(The ip address shld be of your PC).
+But the catch is that they shld be on the same Wi-Fi network.
+
+You will get the ip address of ur pc by typing ipconfig in command prompt or terminal.
+
+--------------------------------
+
 # CiText
 
-[![SchoolProject](https://img.shields.io/badge/School-project-83BD75?labelColor=B4E197&style=for-the-badge)]()
-[![Javascript](https://img.shields.io/badge/Made%20with-Javascript-B22727?labelColor=EE5007&style=for-the-badge)]()
-[![Socket](https://img.shields.io/badge/Uses-Socket.io-E4AEC5?labelColor=FFC4DD&style=for-the-badge)]()
+End-to-end encrypted instant messaging web application!
 
-Web app de **messagerie instantée chiffrée de bout en bout** disponible sur 🔗 [CiText.fr](https://CiText.fr).
+Group chats, end-to-end encryption and private messages.
 
-Conversation de groupe, chiffrement end-to-end, messages privés et gestion du compte. 
+## To launch the server
 
-## Lancement du serveur
+-Install MongoDB (Linux Ubuntu):
 
-- Installer Mongo (Linux Ubuntu) :
-  
-  ```shell
-  sudo apt get install mongo
-  # Vérifier que tout fonctionne 
-  mongo
-  > show dbs
-  ```
+```shell
+sudo apt get install mongo
+# Verify whether everything works
+mongo
+> show dbs
+```
 
-- À la racine du projet :
+- At the root of the project:
+
   - `npm init -y`
   - `npm install cors mongoose express jsonwebtoken dotenv bcryptjs cookie-parser ws socket.io crypto-js`
   - `npm install nodemon -D`
-  - Modifier les scripts du fichier `package.json` comme suit :
+  - Modify the scripts section of `package.json` as follows:
 
     ```json
     "scripts": {
@@ -33,11 +40,11 @@ Conversation de groupe, chiffrement end-to-end, messages privés et gestion du c
     }
     ```
 
-  - Créer un fichier `.env` avec les valeurs suivantes :
+  - Create a `.env` file with the following values :
 
     ```env
+    API_HOST=192.168.0.193
     API_PORT=8000
-    API_HOST=localhost
     SSL=false
 
     MONGO_URI= mongodb://localhost:27017/CiText
@@ -45,31 +52,28 @@ Conversation de groupe, chiffrement end-to-end, messages privés et gestion du c
     TOKEN_KEY=random_string
     ```
 
-- Taper `npm run dev` pour lancer le serveur (`index.js`)
-- Le script s'actualise automatiquement avec `nodemon` à chaque modification de fichier
-- Les messages "*Listening on `http://localhost:8000`*" et "*Successfully connected to database*" confirment le bon lancement du serveur
+- Run npm run dev to launch the server (index.js).
+- The script automatically restarts with `nodemon` whenever a file is modified.
+- Messages like `Listening on http://192.168.0.193:8000` and 'Successfully connected to database' confirm the server started successfully.
 
 ## Auteurs
 
-* [@Elyn](https://github.com/vdElyn)
-* [@Vincent](https://github.com/uvsq21802951)
-* [@Elo](https://github.com/elo0501)
-* [@Dylan](https://github.com/deadcode-overflow)
+- [@mandarrai10](https://github.com/mandarrai10n)
 
-## 🚧 Axes d'amélioration
+## 🚧 Areas for Improvement
 
-### Côté serveur
+### Server side
 
-- [ ] Améliorer la gestion des statuts `En ligne` / `Hors ligne` des utilisateurs
-- [ ] Gérer le cas de la double connexion pour un même utilisateur 
-- [ ] Modifier la façon de récupérer les messages d'un chat (pour gérer un + grand nombre de données)
-  - Requète pour fetch les 50 derniers messages pour les afficher
-  - Si l'utilisateur remonte son chat, la scrollbar se bloque le temps de fetch les 50 prochains messages
+- [ ] Improve user status management (Online/Offline).
+- [ ] Handle cases where the same user connects from multiple devices.
+- [ ] Change the method of fetching chat messages (to manage a larger amount of data)
+  - Fetch the last 50 messages for display.
+  - When scrolling up, pause the scrollbar to load the next 50 messages.
 
-### Côté client
+### Client side
 
-- [ ] Script `getMessages(idchat)` pour un `GET` API sur `/getAllMessages` avec l'IdChat en body de requète
-- [ ] `selectContact()`: clear le tableau `messagesArray` et appeler `getMessages(idchat)` pour le re-remplir
-- [ ] Ajouter une icône pour le statut `En ligne` des contacts et les conversations chiffrées
-- [ ] Bouton option en haut à droite du contact (?)
-- [ ] Ajouter un bouton pour supprimer un message ou une conversation (?)
+- [ ] Script `getMessages(idchat):` Make a `GET` API call to `/getAllMessages` with the chat ID in the request body.
+- [ ] `selectContact():` Clear `messagesArray` and call `getMessages(idchat)` to refill it.
+- [ ] Add icons for `Online` status and encrypted conversations.
+- [ ] Optional button in the top-right corner of a contact.
+- [ ] Add a button to delete a message or conversation.
