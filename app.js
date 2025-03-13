@@ -24,8 +24,12 @@ const verifyToken = require("./middleware/verifyToken");
 
 // Redirects to the home page if the token (cookie) is valid; otherwise, it returns the login page.
 app.get("/", verifyToken, (req, res) => {
-  if (req.user) res.status(200).sendFile(__dirname + "/source/home.html");
-  else res.status(req.err.status).sendFile(__dirname + "/source/login.html");
+  if (req.user) {
+    res.status(200).sendFile(__dirname + "/source/home.html");
+  } else {
+    const status = req.err && req.err.status ? req.err.status : 401;
+    res.status(status).sendFile(__dirname + "/source/login.html");
+  }
 });
 
 require("./routes/users.routes")(app);

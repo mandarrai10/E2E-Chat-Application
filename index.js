@@ -1,11 +1,10 @@
-const app = require("./app");
 require("dotenv").config();
+const app = require("./app");
 
-const HOST = process.env.API_HOST;
-const PORT = process.env.API_PORT;
+const HOST = process.env.API_HOST || "localhost";  // Default to "localhost" if undefined
+const PORT = process.env.API_PORT || 5000;        // Default to 5000 if undefined
 
-// server listening 
-app.listen(PORT, () => {
-    console.log(`listening on http://${HOST}:${PORT}`);
+// Server listening 
+app.listen(PORT, HOST, () => {
+    console.log(`Server is running on http://${HOST}:${PORT}`);
 });
-
