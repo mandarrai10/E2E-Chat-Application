@@ -1,16 +1,26 @@
 require("dotenv").config();
-require("./config/database").connect();
 const express = require("express");
 const cookieParser = require("cookie-parser");
-var cookie = require("cookie");
+const path = require("path");
+const fs = require("fs");
+const http = require("http");
+const https = require("https");
+const socketIO = require("socket.io");
+const cookie = require("cookie");
+
+const { connect } = require("./config/database");
+const verifyToken = require("./middleware/verifyToken");
+const MessageModel = require("./model/message");
+const User = require("./model/user");
+const Conversation = require("./model/conversation");
+const CryptoJS = require("crypto-js");
 
 const app = express();
 
 app.use(cookieParser());
 app.use(express.json()); // to support JSON-encoded bodies
-app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodiesI
+app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
-const path = require("path");
 const htmlPath = path.join(__dirname, "/source");
 app.use(express.static(htmlPath));
 
@@ -20,9 +30,6 @@ app.use("/images", express.static(__dirname + "/source/images"));
 
 // Routing //
 
-const verifyToken = require("./middleware/verifyToken");
-
-// Redirects to the home page if the token (cookie) is valid; otherwise, it returns the login page.
 app.get("/", verifyToken, (req, res) => {
   if (req.user) {
     res.status(200).sendFile(__dirname + "/source/home.html");
@@ -35,7 +42,7 @@ app.get("/", verifyToken, (req, res) => {
 require("./routes/users.routes")(app);
 require("./routes/conversations.routes")(app);
 
-// Initialize serveur HTTP/HTTPS //
+// Initialize server HTTP/HTTPS //
 
 let SSL = process.env.SSL;
 const PORT = process.env.API_PORT;
@@ -48,18 +55,12 @@ var cfg = {
   ssl_cert: "./fullchain.pem",
 };
 
-var httpServ = cfg.ssl ? require("https") : require("http");
+var httpServ = cfg.ssl ? https : http;
 var server = null;
 
-// var processRequest = function (req, res) {
-//     console.log("Request received.")
-// };
-
-const fs = require("fs");
 if (cfg.ssl) {
   server = httpServ.createServer(
     {
-      // providing server with  SSL key/cert
       key: fs.readFileSync(cfg.ssl_key),
       cert: fs.readFileSync(cfg.ssl_cert),
     },
@@ -71,23 +72,12 @@ if (cfg.ssl) {
 
 // WEBSOCKETS //
 
-const socketIO = require("socket.io");
 const io = socketIO(server);
 
 const clientList = new Map();
-// const diffieHellmanProtocol = new Array();
 console.log("\nServer is open !\n");
 
-const MessageModel = require("./model/message");
-const User = require("./model/user");
-const Conversation = require("./model/conversation");
-
-// CryptoJS //
-
-const CryptoJS = require("crypto-js");
-
 io.on("connection", async (socket) => {
-  // Checks if the Discussions channel exists and creates it if it doesn't
   const discussions = await Conversation.findOne({ userId1: null });
   if (!discussions) {
     console.log("Création du canal Discussions");
@@ -187,25 +177,27 @@ io.on("connection", async (socket) => {
 async function sendAllStoredMessages(socket) {
   let metadata = clientList.get(socket);
   var convIds = new Array();
-  await Conversation.find({
+  const convs = await Conversation.find({
     $or: [
       { userId1: null },
       { userId1: metadata.id },
       { userId2: metadata.id },
     ],
-  }).then(async function (convs) {
-    convs.forEach(function (conv) {
-      convIds.push(conv._id);
-    });
-
-    await MessageModel.find({ idchat: { $in: convIds } }).then(function (msgs) {
-      msgs.sort(function (a, b) {
-        return a.time - b.time;
-      });
-
-      socket.emit("allMessages", msgs);
-    });
   });
+
+  convs.forEach(function (conv) {
+    convIds.push(conv._id);
+  });
+
+  const msgs = await MessageModel.find({ idchat: { $in: convIds } });
+  msgs.sort(function (a, b) {
+    return a.time - b.time;
+  });
+
+  socket.emit("allMessages", msgs);
 }
+
+// Connect to the database
+connect();
 
 module.exports = server;
