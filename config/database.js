@@ -8,18 +8,19 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-exports.connect = () => {
-  mongoose
-    .connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then(() => {
-      console.log("✅ Successfully connected to database");
-    })
-    .catch((error) => {
-      console.error("❌ Database connection failed. Exiting now...");
-      console.error(error);
-      process.exit(1);
-    });
+exports.connect = async () => {
+  try {
+    await mongoose.connect(MONGO_URI); // Removed deprecated options
+    console.log("✅ Successfully connected to database");
+  } catch (error) {
+    console.error("❌ Database connection failed. Exiting now...");
+    console.error(`Error Message: ${error.message}`);
+    
+    // Check if it's an authentication error
+    if (error.code === 8000) {
+      console.error("🚨 Authentication failed. Verify your MongoDB username and password.");
+    }
+
+    process.exit(1);
+  }
 };
