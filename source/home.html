@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="https://cdn.glitch.global/42e33cd0-7279-4ff4-bbdf-b2e87b5fb08b/logo2.jpeg?v=1647381921310" />
 
-    <title>Chat Application</title>
+    <title>Dylchat</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -16,9 +16,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- Popper.js et Bootstrap 3.3.7.min.js -->
-    <script type='text/javascript'
-        src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
+    <!-- Popper.js and Bootstrap 3.3.7.min.js -->
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -42,22 +41,23 @@
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Are you sure you want to log out?</p>
+                    <p>Do you really want to log out?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="deconnexion()">Disconnect</button>
+                    <button type="button" class="btn btn-primary" onclick="logout()">Logout</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Add a contact -->
     <div class="modal fade" id="addContactPopup" data-keyboard="true" role="dialog">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title fw-bold">Add a conversation
+                    <h4 class="modal-title fw-bold">Add a Conversation
                         <h4>
                 </div>
 
@@ -71,17 +71,15 @@
                         </div>
 
                         <div class="form-group">
-                            <button id="openEndToEndPopup" type="button" class="btn btn-default">🔒 Encrypted
-                                conversation</button>
-                            <button id="addContactConfirm" type="submit" class="btn btn-primary">Add without
-                                encryption</button>
+                            <button id="openEndToEndPopup" type="button" class="btn btn-default">🔒 Encrypted Conversation</button>
+                            <button id="addContactConfirm" type="submit" class="btn btn-primary">Add without encryption</button>
                         </div>
 
                     </form>
-                    <small id="addContactError" class="form-text text-danger fw-bold invisible">Error
-                        placeholder</small>
+                    <small id="addContactError" class="form-text text-danger fw-bold invisible">Error placeholder</small>
 
                 </div>
+                <!-- End modal body -->
             </div>
         </div>
     </div>
@@ -92,8 +90,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
-                    <h4 class="modal-title fw-bold">🔒 Create an encrypted conversation <span class="gray">Authenticated
-                            Diffie-Hellman key exchange</span>
+                    <h4 class="modal-title fw-bold">🔒 Create an Encrypted Conversation <span class="gray">– Authenticated Diffie-Hellman Key Exchange</span>
                         <h4>
                 </div>
 
@@ -101,56 +98,56 @@
                     <h5 id="otherUserDFProgress" class="form-text text-primary fw-bold">Waiting for ...</h5>
                     <form>
                         <div class="form-group">
-                            <!-- ToDo : passer en DH authentifié -->
+                            <!-- ToDo: switch to authenticated DH -->
                             <!--
                             <div class="input-group">
                                 <div class="input-group-addon">#</div>
-                                <input type="text" class="form-control" id="publicKeyInput" placeholder="Clé publique">
+                                <input type="text" class="form-control" id="publicKeyInput" placeholder="Public Key">
                             </div>
                             <div class="input-group">
                                 <div class="input-group-addon">#</div>
-                                <input type="text" class="form-control" id="privateKeyInput" placeholder="Clé privée">
+                                <input type="text" class="form-control" id="privateKeyInput" placeholder="Private Key">
                             </div>
                             -->
                             <!-- <div class="input-group"> -->
-                            <!-- <div class="input-group-addon">AES</div> -->
-                            <input type="text" class="form-control" id="generatedSymKey"
-                                placeholder="Waiting for the protocol..." disabled>
+                                <!-- <div class="input-group-addon">AES</div> -->
+                                <input type="text" class="form-control" id="generatedSymKey" placeholder="Waiting for protocol..." disabled>
                             <!-- </div> -->
                         </div>
-                        <button id="cancelDiffieHellman" type="submit" class="btn btn-default">Cancel protocol</button>
-                        <button id="readyDiffieHellman" type="submit" class="btn btn-primary">I'm ready</button>
-                        <button id="terminateDiffieHellman" class="btn btn-danger" data-dismiss="modal"
-                            hidden="hidden">Close window</button>
+                        <!-- ToDo: add fields required for Diffie-Hellman -->
+                        <button id="cancelDiffieHellman" type="submit" class="btn btn-default">Cancel Protocol</button>
+                        <button id="readyDiffieHellman" type="submit" class="btn btn-primary">I'm Ready</button>
+                        <button id="terminateDiffieHellman" class="btn btn-danger" data-dismiss="modal" hidden="hidden">Close Window</button>
                     </form>
-                    <small id="diffieHellmanError" class="form-text text-danger fw-bold invisible">Error
-                        placeholder</small>
+                    <small id="diffieHellmanError" class="form-text text-danger fw-bold invisible">Error placeholder</small>
 
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="notifDHPopup" role="dialog">
+     <!-- Diffie-Hellman Notification -->
+     <div class="modal fade" id="notifDHPopup" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p id="notifDHText">So-and-so wants to start a private conversation with you.</p>
+                    <p id="notifDHText">Someone wants to start a private conversation with you.</p>
                 </div>
                 <div class="modal-footer">
-                    <button id="rejectDiffieHellman" type="button" class="btn btn-default">Refuse</button>
+                    <button id="rejectDiffieHellman" type="button" class="btn btn-default">Decline</button>
                     <button id="acceptDiffieHellman" type="button" class="btn btn-primary">Accept</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- AES Keys -->
     <div class="modal fade" id="AESKeysPopup" data-keyboard="true" role="dialog">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title fw-bold">🔓 Unlocking private conversations
+                    <h4 class="modal-title fw-bold">🔓 Unlock Private Conversations
                         <h4>
                 </div>
 
@@ -159,30 +156,35 @@
 
                         <div class="form-group">
                             <label for="AESKeysInput" class="control-label">
-                                Keys must be entered in the form:<br>
-                                <code class="gray">"IDConv1": "AES1 Key", "IDConv2": "AES2 Key"</code>
+                                AES keys must be entered in the format:<br>
+                                <code class="gray">"ConvID1": "AESKey1", "ConvID2": "AESKey2"</code>
                             </label>
                             <textarea id="AESKeysInput" class="form-control"></textarea>
                         </div>
 
+                        <p class="gray">You can modify your keys at any time from your <span class="text-link-blue" onclick="">profile</span>.</p>
+
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button id="AESKeysConfirm" type="submit" class="btn btn-primary"> Decipher
-                            conversations</button>
+                        <button id="AESKeysConfirm" type="submit" class="btn btn-primary">Decrypt Conversations</button>
 
                     </form>
                     <small id="AESKeysError" class="form-text text-danger fw-bold invisible">Error placeholder</small>
 
                 </div>
+                <!-- End modal body -->
             </div>
         </div>
     </div>
 
+    <!-- End pop-ups -->
 
     <div class="container app">
         <div class="row app-one">
 
             <div id="partie-gauche" class="col-sm-4 side">
+                <!-- Left Section -->
                 <div class="side-one">
+                    <!-- Side One  -->
 
                     <div class="row heading-left">
                         <div class="col-sm-6 col-xs-6 heading-left-name">
@@ -211,7 +213,7 @@
 
 
                     <div id="contact-list" class="row sideBar">
-
+                        <!-- Contact List -->
 
                         <div id="contact-0" class="row sideBar-body">
                             <div class="sideBar-main">
@@ -227,22 +229,23 @@
                             <div class="sideBar-main">
                                 <div class="row">
                                     <div class="col-sm-12 col-xs-12 sideBar-lastMessage">
-                                        <span class="lastMessage-meta"></span>
+                                        <span class="lastMessage-meta">Dylan: Yeah guys</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    <!-- End Contact List -->
 
                     <div class="row footer-gauche">
 
-                        <div class="col-sm-2 col-xs-2 footer-accueil" onclick="accueilpage()">
+                        <div class="col-sm-2 col-xs-2 footer-accueil" onclick="homepage()">
                             <i class="fa fa-home fa-xl" aria-hidden="true"></i>
                         </div>
 
                         <div class="col-sm-8 col-xs-8 footer-username">
-                            <span id="username">Mon Profil</span>
+                            <span id="username">My Profile</span>
                         </div>
 
                         <div id="logout-button" class="col-sm-2 col-xs-2 footer-logout">
@@ -252,110 +255,7 @@
                     </div>
 
                 </div>
+                <!-- End Side One  -->
 
             </div>
-
-
-
-            <div id="partie-droite" class="col-sm-8 conversation">
-
-
-
-                <div id="accueil" class="row accueil-body">
-                    <div class="accueil-main">
-                        <p class="text-menu">Click on a conversation to start.</p>
-                        <break />
-                        <p class="text-menu">
-                            You can also <span class="text-link-blue" onclick="openAddContactPopup()">add contact</span>
-                            or <span class="text-link-blue" onclick="openGeneralChat()">join the Great
-                                Discussions</span>!
-                        </p>
-                    </div>
-                </div>
-
-                <div id="footer" class="row footer-body">
-                    <div class="footer-main">
-                        <p class="text-menu"> Where everyone talks</p>
-                    </div>
-                </div>
-
-
-                <div id="header-chat" class="row heading hidden">
-                    <div id="back-button" class="hidden-sm hidden-md hidden-lg col-sm-2 col-xs-1 heading-dot">
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                    </div>
-
-                    <div class="col-sm-2 col-md-1 col-xs-1 heading-avatar">
-                        <i class="fa fa-user-o" aria-hidden="true"></i>
-                    </div>
-
-                    <div class="col-sm-8 col-xs-7 heading-name">
-                        <span id="chat-name" class="heading-name-meta">Raja</span>
-                        <span class="heading-online">Online</span>
-                    </div>
-                    <div class="col-sm-1 col-xs-1 heading-dot pull-right">
-                        <i class="fa fa-ellipsis-h right" aria-hidden="true"></i>
-                    </div>
-                </div>
-
-
-                <div id="messages-chat" class="row message hidden">
-
-                    <div class="row message-body">
-                        <div class="message-main">
-                            <span class="message-date">01/20/2022</span>
-                        </div>
-                    </div>
-
-                    <div class="row message-body">
-                        <div class="col-sm-12 message-main-receiver">
-                            <span id="chat-username-0" class="message-nick">Elyn</span>
-                            <div class="receiver">
-                                <div class="message-text">
-                                    Hi, what are you doing?! What happens when the message is too long? </div>
-                                <span class="message-time pull-right">
-                                    17:21
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row message-body">
-                        <div class="col-sm-12 message-main-sender">
-                            <span id="chat-username-0" class="message-nick pull-right">Moi</span>
-                            <div class="sender">
-                                <div class="message-text">
-                                    I am not doing anything
-                                </div>
-                                <span class="message-time pull-right">
-                                    17:23
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                <div id="reply-chat" class="row reply hidden">
-                    <div class="col-sm-9 col-xs-9 reply-main">
-                        <input id="chat-box" type="text" class="write-message"
-                            placeholder="Write your message here" /></input>
-                    </div>
-                    <!-- <div class="col-sm-1 col-xs-1 reply-send">
-                    </div> -->
-                    <div class="col-sm-2 col-xs-2 reply-send">
-                        <i id="send" class="fa fa-paper-plane-o" aria-hidden="true" onclick="sendMessage()"></i>
-                    </div>
-                </div>
-                </section>
-
-            </div>
-
-        </div>
-    </div>
-
-</body>
-
-</html>
+            <!-- End Left Section -->

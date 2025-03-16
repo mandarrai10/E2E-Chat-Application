@@ -25,10 +25,12 @@ function getTime() {
     return result;
 }
 
+// What to do when the connection is established
 ws.addEventListener("open", () => {
     alert("We are connected");
 });
 
+// What to do when the client receives a message from the server
 ws.addEventListener("message", data => {
     let msg = JSON.parse(data.data);
     console.log(msg);
@@ -44,6 +46,7 @@ function addMessageInBox(message) {
     messageBox.appendChild(newMessage);
 }
 
+// Send the message written in the input after clicking the "Send" button
 function sendMessage() {
     let messageInput = document.getElementById("messageInput");
     let message = new Message(pseudo, messageInput.value, getTime());

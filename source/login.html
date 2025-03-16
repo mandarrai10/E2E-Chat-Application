@@ -1,25 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="https://cdn.glitch.global/42e33cd0-7279-4ff4-bbdf-b2e87b5fb08b/logo2.jpeg?v=1647381921310" />
+    <link
+      rel="icon"
+      href="https://cdn.glitch.global/42e33cd0-7279-4ff4-bbdf-b2e87b5fb08b/logo2.jpeg?v=1647381921310"
+    />
 
-    <title>Chat Application</title>
+    <title>Dylchat</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
     <!-- Import the webpage's stylesheet -->
     <link rel="stylesheet" href="../stylesheets/homeBootstrap.css" />
     <link rel="stylesheet" href="../stylesheets/loginPage.css" />
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!-- Popper.js et Bootstrap 3.3.7.min.js -->
-    <script type='text/javascript'
-        src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js'></script>
+    <!-- Popper.js and Bootstrap 3.3.7.min.js -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    ></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -29,111 +39,160 @@
 
     <!-- Import the webpage's javascript file -->
     <script src="../scripts/loginPage.js"></script>
+  </head>
 
-</head>
-
-<body>
+  <body>
+    <!-- Main application frame -->
     <div class="container app">
-        <div class="row app-one">
-
-            <div id="partie-gauche" class="col-sm-4 side">
-                <div class="side-one">
-                    <div class="row side-spacer-1"></div>
-                    <div class="row side-logo-container">
-                        <img src="https://static.thenounproject.com/png/1659651-200.png" />
-                    </div>
-                    <div class="row side-spacer-2"></div>
-                    <div class="row side-text-container">
-                        <p class="side-text-meta">Welcome to secure messaging.</p>
-                    </div>
-
-                </div>
+      <div class="row app-one">
+        <div id="partie-gauche" class="col-sm-4 side">
+          <div class="side-one">
+            <div class="row side-spacer-1"></div>
+            <div class="row side-logo-container">
+              <img
+                src="https://cdn.glitch.global/42e33cd0-7279-4ff4-bbdf-b2e87b5fb08b/logo.jpeg?v=1647381849949"
+              />
             </div>
-
-
-            <div class="col-sm-8 conversation">
-                <div class="row logo-title">
-                    <img src="https://static.thenounproject.com/png/1659651-200.png" />
-                    <p class="CiText-title" style="font-size: 20px;">End to End Encrypted Chat Application</p>
-                </div>
-
-                <div class="row login-container">
-                    <div class="col-sm-12 login">
-                        <span id="se-connecter" class="login-text login-active">Log in</span>
-
-                        <span class="login-text">|</span>
-
-                        <span id="s-inscrire" class="login-text login-inactive"> Register </span>
-                    </div>
-                </div>
-
-                <div class="row log-form-container visible">
-
-                    <form id="login-form" class="log-form">
-                        <div class="input-container">
-                            <input type="text" id="usernameLogin" name="usernameLogin" required="" />
-                            <label>Username</label>
-
-                            <i class="text-red hidden" id="errorLoginID" aria-hidden="true">Incorrect Username</i>
-
-                        </div>
-                        <div class="input-container">
-                            <input type="password" id="passwordLogin" name="passwordLogin" required="" />
-                            <label>Password</label>
-
-                            <i class="text-red hidden" id="errorLoginPwd" aria-hidden="true">Username or password
-                                incorrect</i>
-
-                        </div>
-                        <div class="bouton-text-container">
-                            <div class="bouton-connexion">
-                                <button class="btn-connect" role="button">Connect</button>
-                            </div>
-                            <p class="text-connect gray">New User?</p>
-                            <p class="text-connect text-link-blue" onclick="switchLoginForm()">Register Here</p>
-                        </div>
-                    </form>
-
-                </div>
-
-                <div class="row log-form-container hidden">
-
-                    <form id="register-form" class="log-form">
-                        <div class="input-container">
-                            <input type="text" id="usernameSignup" name="usernameSignup" required="" />
-                            <label>Username</label>
-
-                            <i class="text-red hidden" id="errorRegister" aria-hidden="true">Username already
-                                Exists.</i>
-
-                        </div>
-                        <div class="input-container">
-                            <input type="password" id="passwordSignup" name="passwordSignup" required="" />
-                            <label>Enter a password</label>
-                        </div>
-
-
-                        <div class="strenght-password-container">
-                            <div id="strenght_password_box_1" class="strenght-password-bar"></div>
-                            <div id="strenght_password_box_2" class="strenght-password-bar"></div>
-                            <div id="strenght_password_box_3" class="strenght-password-bar"></div>
-                        </div>
-
-                        <div class="bouton-text-container">
-                            <div class="bouton-connexion">
-                                <button class="btn-connect" role="button">Register</button>
-                            </div>
-                            <p class="text-connect gray">Already have an account?</p>
-                            <p class="text-connect text-link-blue" onclick="switchLoginForm()">Login</p>
-                        </div>
-                        <div id="password_advice"><b>Tip:</b> A <u>strong</u> password contains letters
-                            lowercase and uppercase letters, special characters and numbers. </div>
-                    </form>
-
-                </div>
-
-            </div> 
+            <div class="row side-spacer-2"></div>
+            <div class="row side-text-container">
+              <p class="side-text-meta">
+                Welcome to Dylchat, a secure messaging platform.
+              </p>
+            </div>
+          </div>
         </div>
-    </div>
+        <!-- End left section -->
 
-</body>
+        <div class="col-sm-8 conversation">
+          <div class="row logo-title">
+            <img
+              src="https://cdn.glitch.global/42e33cd0-7279-4ff4-bbdf-b2e87b5fb08b/logo2.jpeg?v=1647381921310"
+            />
+            <p class="dylchat-title">Dylchat</p>
+          </div>
+
+          <!-- Login / Signup Buttons -->
+          <div class="row login-container">
+            <div class="col-sm-12 login">
+              <span id="se-connecter" class="login-text login-active"
+                >Login</span
+              >
+
+              <span class="login-text">|</span>
+
+              <span id="s-inscrire" class="login-text login-inactive">
+                Sign Up
+              </span>
+            </div>
+          </div>
+
+          <!-- Login Form -->
+          <div class="row log-form-container visible">
+            <form id="login-form" class="log-form">
+              <div class="input-container">
+                <input
+                  type="text"
+                  id="usernameLogin"
+                  name="usernameLogin"
+                  required=""
+                />
+                <label>Username</label>
+
+                <i class="text-red hidden" id="errorLoginID" aria-hidden="true"
+                  >Incorrect username or password</i
+                >
+              </div>
+              <div class="input-container">
+                <input
+                  type="password"
+                  id="passwordLogin"
+                  name="passwordLogin"
+                  required=""
+                />
+                <label>Password</label>
+
+                <i class="text-red hidden" id="errorLoginPwd" aria-hidden="true"
+                  >Incorrect username or password</i
+                >
+              </div>
+              <div class="bouton-text-container">
+                <div class="bouton-connexion">
+                  <button class="btn-connect" role="button">Login</button>
+                </div>
+                <p class="text-connect gray">Don't have an account yet?</p>
+                <p
+                  class="text-connect text-link-blue"
+                  onclick="switchLoginForm()"
+                >
+                  Sign Up
+                </p>
+              </div>
+            </form>
+          </div>
+
+          <!-- Signup Form -->
+          <div class="row log-form-container hidden">
+            <form id="register-form" class="log-form">
+              <div class="input-container">
+                <input
+                  type="text"
+                  id="usernameSignup"
+                  name="usernameSignup"
+                  required=""
+                />
+                <label>Username</label>
+
+                <i class="text-red hidden" id="errorRegister" aria-hidden="true"
+                  >Username already exists. Please log in.</i
+                >
+              </div>
+              <div class="input-container">
+                <input
+                  type="password"
+                  id="passwordSignup"
+                  name="passwordSignup"
+                  required=""
+                />
+                <label>Password</label>
+              </div>
+
+              <div class="strenght-password-container">
+                <div
+                  id="strenght_password_box_1"
+                  class="strenght-password-bar"
+                ></div>
+                <div
+                  id="strenght_password_box_2"
+                  class="strenght-password-bar"
+                ></div>
+                <div
+                  id="strenght_password_box_3"
+                  class="strenght-password-bar"
+                ></div>
+              </div>
+
+              <div class="bouton-text-container">
+                <div class="bouton-connexion">
+                  <button class="btn-connect" role="button">Sign Up</button>
+                </div>
+                <p class="text-connect gray">Already registered?</p>
+                <p
+                  class="text-connect text-link-blue"
+                  onclick="switchLoginForm()"
+                >
+                  Login
+                </p>
+              </div>
+              <div id="password_conseil">
+                <b>Tip:</b> A <u>strong</u> password contains lowercase and
+                uppercase letters, special characters, and numbers. We recommend
+                using a password of at least 8 characters.
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- End right section -->
+      </div>
+    </div>
+  </body>
+</html>

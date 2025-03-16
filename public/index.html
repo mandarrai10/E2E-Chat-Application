@@ -3,27 +3,25 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>node test</title>
+    <title>Node Test</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
     <h1>Instant Messaging</h1>
 
-    <h2>Here are written the different messages that you send and receive: </h2>
+    <h2>Here are the different messages you send and receive:</h2>
 
     <div id="inputPseudo">
-        <label for="pseudoInput">Choose your nickname: </label>
+        <label for="pseudoInput">Choose your username: </label>
         <input type="text" id="pseudoInput" name="pseudoInput" required minlength="1" maxlength="200" size="10">
-        <button class="button" onclick="chosePseudo()" value="Enter your message">choose</button>
+        <button class="button" onclick="chosePseudo()">Choose</button>
     </div>
-
 
     <div id="divInput">
         <label for="messageInput">Enter your message: (Maximum 200 characters)</label>
         <input type="text" id="messageInput" name="messageInput" required minlength="1" maxlength="200" size="10">
-        <button class="button" onclick="sendMessage()" value="Enter your message">Send</button>
+        <button class="button" onclick="sendMessage()">Send</button>
     </div>
 
     <div id="messageBox"></div>

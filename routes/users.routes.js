@@ -18,13 +18,13 @@ module.exports = (app) => {
   // Displays all users from the database
   router.get("/getUsers", getUsers);
 
-  // Retrieves the connected users
+  // Retrieves connected users
   router.get("/getOnlineUsers", getOnlineUsers);
 
-  // Retrieves the username of the connected user
+  // Retrieves the username of the logged-in user
   router.get("/getUsername", getUsername);
 
-  // Disconnects a user (sets them offline and destroys their cookie)
+  // Logs out a user (sets them offline and destroys their cookie)
   router.get("/logout", logout);
 
   app.use("/api/users", router);

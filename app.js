@@ -1,19 +1,8 @@
 require("dotenv").config();
+require("./config/database").connect();
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const path = require("path");
-const fs = require("fs");
-const http = require("http");
-const https = require("https");
-const socketIO = require("socket.io");
-const cookie = require("cookie");
-
-const { connect } = require("./config/database");
-const verifyToken = require("./middleware/verifyToken");
-const MessageModel = require("./model/message");
-const User = require("./model/user");
-const Conversation = require("./model/conversation");
-const CryptoJS = require("crypto-js");
+var cookie = require("cookie");
 
 const app = express();
 
@@ -21,183 +10,174 @@ app.use(cookieParser());
 app.use(express.json()); // to support JSON-encoded bodies
 app.use(express.urlencoded({ extended: true })); // to support URL-encoded bodies
 
+const path = require("path");
 const htmlPath = path.join(__dirname, "/source");
 app.use(express.static(htmlPath));
 
-app.use("/styles", express.static(__dirname + "/source/stylesheets"));
-app.use("/scripts", express.static(__dirname + "/source/javascripts"));
-app.use("/images", express.static(__dirname + "/source/images"));
+app.use("/styles", express.static(__dirname + '/source/stylesheets'));
+app.use("/scripts", express.static(__dirname + '/source/javascripts'));
+app.use("/images", express.static(__dirname + '/source/images'));
 
 // Routing //
 
+const verifyToken = require("./middleware/verifyToken");
+
+// Access the home page if the token (cookie) is valid, otherwise redirect to login page  
 app.get("/", verifyToken, (req, res) => {
-  if (req.user) {
-    res.status(200).sendFile(__dirname + "/source/home.html");
-  } else {
-    const status = req.err && req.err.status ? req.err.status : 401;
-    res.status(status).sendFile(__dirname + "/source/login.html");
-  }
-});
+    if (req.user)
+        res.status(200).sendFile(__dirname + "/source/home.html");
+    else
+        res.status(req.err.status).sendFile(__dirname + "/source/login.html");
+})
 
 require("./routes/users.routes")(app);
 require("./routes/conversations.routes")(app);
 
-// Initialize server HTTP/HTTPS //
+
+// Initialize HTTP/HTTPS server //
 
 let SSL = process.env.SSL;
 const PORT = process.env.API_PORT;
 SSL = SSL == "true" ? true : false;
 
 var cfg = {
-  ssl: SSL,
-  port: PORT,
-  ssl_key: "./privkey.pem",
-  ssl_cert: "./fullchain.pem",
+    ssl: SSL,
+    port: PORT,
+    ssl_key: './privkey.pem',
+    ssl_cert: './fullchain.pem'
 };
 
-var httpServ = cfg.ssl ? https : http;
+var httpServ = (cfg.ssl) ? require('https') : require('http');
 var server = null;
 
+const fs = require('fs');
 if (cfg.ssl) {
-  server = httpServ.createServer(
-    {
-      key: fs.readFileSync(cfg.ssl_key),
-      cert: fs.readFileSync(cfg.ssl_cert),
-    },
-    app
-  );
+    server = httpServ.createServer({
+        // Providing server with SSL key/cert
+        key: fs.readFileSync(cfg.ssl_key),
+        cert: fs.readFileSync(cfg.ssl_cert)
+    }, app);
 } else {
-  server = httpServ.createServer(app);
+    server = httpServ.createServer(app);
 }
+
 
 // WEBSOCKETS //
 
+const socketIO = require('socket.io');
 const io = socketIO(server);
 
 const clientList = new Map();
-console.log("\nServer is open !\n");
+console.log("\nServer is open!\n")
 
-io.on("connection", async (socket) => {
-  const discussions = await Conversation.findOne({ userId1: null });
-  if (!discussions) {
-    console.log("Création du canal Discussions");
-    await Conversation.create({
-      userId1: null,
-      userId2: null,
-      lastMessageId: null,
-      encrypted: false,
-    });
-  }
+const MessageModel = require("./model/message");
+const User = require("./model/user");
+const Conversation = require("./model/conversation");
 
-  var cookies = cookie.parse(socket.handshake.headers.cookie);
-  const user = await User.findOne({ token: cookies.jwt });
-  const metadata = { username: user.username, id: user._id };
-  console.log("%s is now connected!", metadata.username);
-  clientList.set(socket, metadata);
-  await User.updateOne({ token: cookies.jwt }, { $set: { status: 1 } });
-  socket.emit("connected", metadata);
+// CryptoJS //
 
-  sendAllStoredMessages(socket);
+const CryptoJS = require('crypto-js');
 
-  socket.on("newMessage", async (message) => {
-    let newMessage = new MessageModel(message);
-    newMessage.save();
+io.on('connection', async(socket) => { 
 
-    let messageId = newMessage._id;
-    console.log(message);
-
-    const conv = await Conversation.findOne({ _id: message.idchat });
-    if (!conv) {
-      console.log("ERR - Conversation non trouvée");
-      return;
+    // Check if the Discussions channel exists, create it if not 
+    const discussions = await Conversation.findOne({ userId1: null });
+    if (!discussions) {
+        console.log("Creating Discussions channel")
+        await Conversation.create({
+            userId1: null,
+            userId2: null,
+            lastMessageId: null,
+            encrypted: false
+        });
     }
 
-    await Conversation.findOneAndUpdate(
-      { _id: message.idchat },
-      { lastMessageId: messageId }
-    );
+    var cookies = cookie.parse(socket.handshake.headers.cookie);
+    const user = await User.findOne({ token: cookies.jwt });
+    const metadata = { username: user.username, id: user._id };
+    console.log("%s is now connected!", metadata.username);
+    clientList.set(socket, metadata);
+    await User.updateOne({ token: cookies.jwt }, { $set: { status: 1 } });
+    socket.emit("connected", metadata);
 
-    if (!conv.userId1) {
-      clientList.forEach(function (metadata, clientSocket) {
-        console.log("Sent to " + metadata.username);
-        clientSocket.emit("newMessage", message);
-      });
-    } else {
-      clientList.forEach(function (metadata, clientSocket) {
-        if (
-          metadata.id.equals(conv.userId1) ||
-          metadata.id.equals(conv.userId2)
-        ) {
-          console.log("Sent to " + metadata.username);
-          clientSocket.emit("newMessage", message);
+    // ToDo: Do not send all messages automatically (let the user fetch messages by clicking on a conversation)
+    sendAllStoredMessages(socket);
+
+    socket.on("newMessage", async(message) => {
+        let newMessage = new MessageModel(message);
+        newMessage.save();
+
+        let messageId = newMessage._id;
+        console.log(message);
+
+        // Get the conversation of the message
+        const conv = await Conversation.findOne({ _id: message.idchat });
+        if (!conv) {
+            console.log("ERR - Conversation not found");
+            return;
         }
-      });
-    }
-  });
 
-  socket.on("newConversation", async (data) => {
-    socket.emit("newConversation");
-    clientList.forEach(function (metadata, clientSocket) {
-      if (metadata.id.equals(data.userId2)) {
-        clientSocket.emit("newConversation");
-      }
+        // Update the conversation by storing the new message ID
+        await Conversation.findOneAndUpdate({ _id: message.idchat }, { lastMessageId: messageId });
+
+        // If it's a general chat: send the message to all connected clients
+        if (!conv.userId1) {
+            clientList.forEach(function(metadata, clientSocket) {
+                console.log("Sent to " + metadata.username);
+                clientSocket.emit("newMessage", message);
+            });
+        }
+        // Otherwise: send it only to the two users involved
+        else {
+            clientList.forEach(function(metadata, clientSocket) {
+                if (metadata.id.equals(conv.userId1) || metadata.id.equals(conv.userId2)) {
+                    console.log("Sent to " + metadata.username);
+                    clientSocket.emit("newMessage", message);
+                }
+            });
+        }
     });
-  });
 
-  socket.on("engageDiffieHellman", async (data) => {
-    clientList.forEach(function (metadata, clientSocket) {
-      if (metadata.id.equals(data.userId2)) {
-        clientSocket.emit("notifDiffieHellman", data);
-        console.log("DH notif sent to " + metadata.username);
-      }
+    socket.on('newConversation', async(data) => {
+        // Transmit the new conversation to both involved users
+        socket.emit("newConversation");
+        clientList.forEach(function(metadata, clientSocket) {
+            if (metadata.id.equals(data.userId2)) {
+                clientSocket.emit("newConversation");
+            }
+        });
     });
-  });
 
-  socket.on("acceptedDiffieHellman", async (data) => {
-    clientList.forEach(function (metadata, clientSocket) {
-      if (metadata.id.equals(data.userId1)) {
-        clientSocket.emit("acceptedDiffieHellman", data);
-      }
+    socket.on('disconnect', async() => {
+        console.log("%s has disconnected", clientList.get(socket).username);
+        await User.updateOne({ _id: clientList.get(socket).id }, { $set: { status: 0 } });
+        clientList.delete(socket);
     });
-  });
-
-  socket.on("cancelDiffieHellman", async (userId1, userId2) => {});
-
-  socket.on("disconnect", async () => {
-    console.log("%s has disconnected", clientList.get(socket).username);
-    await User.updateOne(
-      { _id: clientList.get(socket).id },
-      { $set: { status: 0 } }
-    );
-    clientList.delete(socket);
-  });
 });
 
-// Send to the client all the stored messages
+
+// Send all stored messages to the client
 async function sendAllStoredMessages(socket) {
-  let metadata = clientList.get(socket);
-  var convIds = new Array();
-  const convs = await Conversation.find({
-    $or: [
-      { userId1: null },
-      { userId1: metadata.id },
-      { userId2: metadata.id },
-    ],
-  });
+    let metadata = clientList.get(socket);
+    var convIds = new Array();
+    await Conversation.find({
+        $or: [{ userId1: null }, { userId1: metadata.id }, { userId2: metadata.id }]
+    }).then(async function(convs) {
+        convs.forEach(function(conv) {
+            convIds.push(conv._id);
+        });
 
-  convs.forEach(function (conv) {
-    convIds.push(conv._id);
-  });
+        // Get only the messages from the user's conversations
+        await MessageModel.find({ idchat: { $in: convIds } }).then(function(msgs) {
 
-  const msgs = await MessageModel.find({ idchat: { $in: convIds } });
-  msgs.sort(function (a, b) {
-    return a.time - b.time;
-  });
+            // Sort messages by timestamp
+            msgs.sort(function(a, b) {
+                return a.time - b.time
+            });
 
-  socket.emit("allMessages", msgs);
+            socket.emit("allMessages", msgs);
+        });
+    });
 }
-
-// Connect to the database
-connect();
 
 module.exports = server;

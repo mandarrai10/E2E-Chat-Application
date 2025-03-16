@@ -1,4 +1,3 @@
-
 var switchLoginForm = function(e) {
     
     if (e && "login-active" in e.currentTarget.classList) {
@@ -15,6 +14,7 @@ var switchLoginForm = function(e) {
     exInactive.classList.add("login-active");
     exInactive.removeEventListener("click", switchLoginForm, true);
 
+    // Remove required from forms
     let usernameLogin = document.getElementById("usernameLogin");
     if (usernameLogin.required) {
         // Disable Login
@@ -34,6 +34,7 @@ var switchLoginForm = function(e) {
         // Disable password checker
     }
 
+    // Replace the form
     let hiddenForm = document.querySelector(".log-form-container.hidden");
     let activeForm = document.querySelector(".log-form-container.visible");
     activeForm.classList.remove("visible");
@@ -43,8 +44,12 @@ var switchLoginForm = function(e) {
 
 };
 
+// ToDo: switch to jQuery
 var printErrorLoginForm = function(res) {
-    
+    // ToDo: do not filter by status code and keep only one line of error message by printing res.message
+    // get("ErrorField")
+    // ErrorField.innerHTML = res.message
+    // make visible
     console.log(res);
     if (res.status === 409) {
         $("#errorRegister").removeClass("hidden");
@@ -160,6 +165,7 @@ window.addEventListener('DOMContentLoaded', async event => {
         }
     }
 
+    // Add an event on the input to check password strength after the user types it
     password_input.addEventListener("input", () => {
         StrengthChecker(password_input.value);
     });
