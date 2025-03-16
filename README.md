@@ -1,6 +1,9 @@
-# Current Progress!
+**The app is deployed in Render with the link:** https://encrypto-hvrx.onrender.com
+Clickking the link will automatically launch the app.
 
-**To start:** node index.js
+
+
+To start: node index.js
 We can communicate with two users from different PC's or phone by giving the ip address in .env file(The ip address shld be of your PC).
 But the catch is that they shld be on the same Wi-Fi network.
 
@@ -8,7 +11,7 @@ You will get the ip address of ur pc by typing ipconfig in command prompt or ter
 
 --------------------------------
 
-# CiText
+# Encrypto
 
 End-to-end encrypted instant messaging web application!
 
@@ -43,22 +46,22 @@ mongo
   - Create a `.env` file with the following values :
 
     ```env
-    API_HOST=192.168.0.193
-    API_PORT=8000
-    SSL=false
+   API_PORT=5000
 
-    MONGO_URI= mongodb://localhost:27017/CiText
+   API_HOST=0.0.0.0
 
-    TOKEN_KEY=random_string
+   MONGO_URI=mongodb+srv://mandarrai:mandarrai10@cluster0.udiee.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+   TOKEN_KEY=random_string
     ```
 
 - Run npm run dev to launch the server (index.js).
 - The script automatically restarts with `nodemon` whenever a file is modified.
-- Messages like `Listening on http://192.168.0.193:8000` and 'Successfully connected to database' confirm the server started successfully.
+- Messages like `Server is running on http://0.0.0.0:5000` and 'Successfully connected to database' confirm the server started successfully.
 
 ## Authors
 
-- [@mandarrai10](https://github.com/mandarrai10n)
+- [@mandarrai10](https://github.com/mandarrai10)
 
 ## 🚧 Areas for Improvement
 
