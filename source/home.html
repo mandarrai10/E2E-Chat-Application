@@ -229,7 +229,7 @@
                             <div class="sideBar-main">
                                 <div class="row">
                                     <div class="col-sm-12 col-xs-12 sideBar-lastMessage">
-                                        <!-- Removed "Dylan: Yeah guys" -->
+                                        <span class="lastMessage-meta">Dylan: Yeah guys</span>
                                     </div>
                                 </div>
                             </div>
@@ -259,3 +259,111 @@
 
             </div>
             <!-- End Left Section -->
+
+            <div id="partie-droite" class="col-sm-8 conversation">
+                <!-- Begin Right Section -->
+
+                <!-- Home -->
+                <div id="accueil" class="row accueil-body">
+                    <div class="accueil-main">
+                        <p class="text-menu">Click on a conversation to start.</p>
+                        <break />
+                        <p class="text-menu">
+                            You can also <span class="text-link-blue" onclick="openAddContactPopup()">add a contact</span> or <span class="text-link-blue" onclick="openGeneralChat()">join the General Discussions</span>!
+                        </p>
+                    </div>
+                </div>
+
+                <div id="footer" class="row footer-body">
+                    <div class="footer-main">
+                        <p class="text-menu">Encrypto – Where everything starts</p>
+                    </div>
+                </div>
+
+                <div id="header-chat" class="row heading hidden">
+                    <!-- Conversation header -->
+                    <!-- Back button that only appears below sm -->
+                    <div id="back-button" class="hidden-sm hidden-md hidden-lg col-sm-2 col-xs-1 heading-dot">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="col-sm-2 col-md-1 col-xs-1 heading-avatar">
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                    </div>
+
+                    <div class="col-sm-8 col-xs-7 heading-name">
+                        <span id="chat-name" class="heading-name-meta">Elyn</span>
+                        <span class="heading-online">Online</span>
+                    </div>
+                    <div class="col-sm-1 col-xs-1 heading-dot pull-right">
+                        <i class="fa fa-ellipsis-h right" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <!-- End conversation header -->
+
+                <div id="messages-chat" class="row message hidden">
+                    <!-- Message container -->
+
+                    <div class="row message-body">
+                        <div class="message-main">
+                            <span class="message-date">01/20/2022</span>
+                        </div>
+                    </div>
+
+                    <div class="row message-body">
+                        <div class="col-sm-12 message-main-receiver">
+                            <span id="chat-username-0" class="message-nick">Elyn</span>
+                            <div class="receiver">
+                                <div class="message-text">
+                                    Hi, what are you doing?! What happens when the message is too long?
+                                </div>
+                                <span class="message-time pull-right">
+                                    17:21
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row message-body">
+                        <div class="col-sm-12 message-main-sender">
+                            <span id="chat-username-0" class="message-nick pull-right">Me</span>
+                            <div class="sender">
+                                <div class="message-text">
+                                    I am doing nothing man! Apparently, it works well, everything is fine!
+                                </div>
+                                <span class="message-time pull-right">
+                                    17:23
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- End messages -->
+
+                <div id="reply-chat" class="row reply hidden">
+                    <!-- Message input bar -->
+                    <div class="col-sm-9 col-xs-9 reply-main">
+                        <input id="chat-box" type="text" class="write-message" placeholder="Type your message here" /></input>
+                    </div>
+                    <!-- <div class="col-sm-1 col-xs-1 reply-send">
+                        <i class="fa fa-image fa-2x" aria-hidden="true"></i>
+                    </div> -->
+                    <div class="col-sm-2 col-xs-2 reply-send">
+                        <i id="send" class="fa fa-paper-plane-o" aria-hidden="true" onclick="sendMessage()"></i>
+                    </div>
+                </div>
+                <!-- End message input bar -->
+                </section>
+
+            </div>
+            <!-- End Right Section -->
+
+        </div>
+        <!-- End app one -->
+    </div>
+    <!-- End container app -->
+
+</body>
+
+</html>
