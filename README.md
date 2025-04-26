@@ -5,7 +5,7 @@ Clickking the link will automatically launch the app.
 
 To start: node index.js
 We can communicate with two users from different PC's or phone by giving the ip address in .env file(The ip address shld be of your PC).
-But the catch is that they shld be on the same Wi-Fi network.
+But they shld be on the same Wi-Fi network.
 
 You will get the ip address of ur pc by typing ipconfig in command prompt or terminal.
 
