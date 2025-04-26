@@ -11,12 +11,6 @@
     border: 3px solid #FAFAFA;
 }
 
-
-/* .chat {
-    border: 5px solid blue;
-    width: calc(65% - 85px);
-} */
-
 .header-chat {
     background-color: #FFF;
     height: 90px;
@@ -44,45 +38,100 @@
     right: 40px;
 }
 
-
 /* Messages */
 
 .chat .messages-chat {
     padding: 25px 35px;
     text-align: left;
-    /* border: 2px solid black; */
-    /* height: 500px; */
     height: calc(100vh - 250px);
-    /* Solution temporaire pour que la taille de la chatbox ne dépasse pas l'écran (calc()) */
     overflow-y: scroll;
 }
 
-.chat .messages-chat .message {
-    /* border: 2px solid black; */
+.messages-container {
+    width: 100%;
+    display: block;
+}
+
+/* Message row styling */
+.message-body {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* Message main containers */
+.message-main-sender, .message-main-receiver {
     display: flex;
-    align-items: center;
-    /* margin-bottom: 8px; */
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.message-main-sender {
+    align-items: flex-end;
+}
+
+.message-main-receiver {
+    align-items: flex-start;
+}
+
+/* Message nick (username) */
+.message-nick {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+/* Message containers */
+.sender, .receiver {
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
+}
+
+/* Message text styling */
+.message-text {
+    padding: 10px 12px;
+    border-radius: 12px;
+    word-break: break-word;
+    display: inline-block;
+}
+
+.message-main-sender .message-text {
+    background-color: #0084ff;
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+}
+
+.message-main-receiver .message-text {
+    background-color: #333;
+    color: white;
+    border-radius: 18px 18px 18px 4px;
+}
+
+/* Message timestamp styling */
+.message-time {
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+/* Remove trailing colon from time using CSS content property */
+.message-time::after {
+    content: '' !important;
+}
+
+/* Date display in chat */
+.message-date {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    display: block;
+    margin: 15px 0;
 }
 
 .space {
     margin-bottom: 10px;
 }
-
-.chat .messages-chat .text {
-    margin: 0 35px;
-    background-color: #f6f6f6;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 8px;
-    max-width: 35em;
-    overflow-wrap: break-word;
-}
-
-
-/* .text-only {
-    margin-left: 45px;
-    Pour photo de profil
-} */
 
 .username {
     font-size: 12px;
@@ -107,14 +156,14 @@
 .time {
     font-size: 10px;
     color: lightgrey;
-    margin-bottom: 10px;
-    margin: 0 35px;
+    margin-bottom: 5px;
+    margin-top: 2px;
     float: left;
 }
 
 .response-time {
     float: right;
-    margin-right: 40px !important;
+    margin-right: 0 !important;
     margin-left: auto;
 }
 
@@ -124,15 +173,8 @@
     margin-left: auto;
 }
 
-.response .text {
-    background-color: #e3effd !important;
-}
-
 .footer-chat {
     width: calc(65%);
-    /*- 66px);*/
-    margin-left: 30px;
-    /* new */
     height: 80px;
     display: flex;
     align-items: center;
@@ -202,4 +244,14 @@
 
 .clickable {
     cursor: pointer;
+}
+
+/* Change timestamp color to black only in sent (blue) message bubbles */
+.message-main-sender .message-time {
+    color: black !important;
+}
+
+/* Keep timestamp color grey in received (black) message bubbles */
+.message-main-receiver .message-time {
+    color: #888 !important;
 }
