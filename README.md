@@ -1,13 +1,13 @@
 **The app is deployed in Render with the link:** https://encrypto-hvrx.onrender.com
-Clickking the link will automatically launch the app.
+Clicking the link will automatically launch the app.
 
 
 
 To start: node index.js
-We can communicate with two users from different PC's or phone by giving the ip address in .env file(The ip address shld be of your PC).
-But they shld be on the same Wi-Fi network.
+We can communicate with two users from different PC's or phone by giving the ip address in .env file(The ip address should be of your PC).
+But they should be on the same Wi-Fi network.
 
-You will get the ip address of ur pc by typing ipconfig in command prompt or terminal.
+You will get the ip address of your pc by typing ipconfig in command prompt or terminal.
 
 --------------------------------
 
