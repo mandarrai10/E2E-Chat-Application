@@ -1,5 +1,5 @@
 **The app is deployed in Render with the link:** https://encrypto-hvrx.onrender.com
-Clickking the link will automatically launch the app.
+Clicking the link will automatically launch the app.
 
 
 
