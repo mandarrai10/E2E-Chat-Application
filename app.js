@@ -97,6 +97,13 @@ io.on("connection", async (socket) => {
 
   var cookies = cookie.parse(socket.handshake.headers.cookie);
   const user = await User.findOne({ token: cookies.jwt });
+  
+  if (!user) {
+  console.log("Unauthenticated socket connection attempt. Disconnecting.");
+  socket.emit("unauthorized", { message: "Invalid or expired session. Please log in again." });
+  socket.disconnect();
+  return;
+}
   const metadata = { username: user.username, id: user._id };
   console.log("%s is now connected!", metadata.username);
   clientList.set(socket, metadata);
